@@ -9,3 +9,4 @@ ignore = ["E501", "E701", "E702", "F401"]
 [tool.pytest.ini_options]
 addopts = "-p no:cacheprovider"
 norecursedirs = ["pytest-cache-files-*"]
+pythonpath = ["."]
