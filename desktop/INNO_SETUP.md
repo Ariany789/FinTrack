@@ -1,30 +1,12 @@
-# Distribuição para Inno Setup
+# Inno Setup — FINTRACK
 
-## Gerar a pasta de distribuição
+1. Execute `npm run dist` na raiz do projeto.
+2. Abra `desktop\FINTRACK.iss` no Inno Setup.
+3. Clique em **Compile**.
+4. O instalador será gerado em `installer\FINTRACK-Setup.exe`.
 
-Em uma máquina de desenvolvimento com Python 3.12+ e Node.js instalado:
+O script já utiliza automaticamente a pasta `dist\FINTRACK`, preserva toda a estrutura de runtime e cria atalhos no Menu Iniciar e, se escolhido durante a instalação, na Área de Trabalho.
 
-```bash
-npm install
-python -m pip install -r backend/requirements-build.txt
-npm run dist
-```
+O banco SQLite e os logs não ficam na pasta instalada. Eles são criados automaticamente em `%AppData%\FINTRACK`, onde permanecem após atualização, reinstalação ou desinstalação do aplicativo.
 
-O resultado é `dist/FINTRACK/`. Essa pasta já contém o runtime do Electron, o backend Python empacotado e o frontend compilado.
-
-## Entrada do Inno Setup
-
-Use `dist/FINTRACK/` como origem dos arquivos. O atalho deve apontar para `FINTRACK.exe`.
-
-```iss
-Source: "dist\FINTRACK\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs
-Name: "{autoprograms}\FINTRACK"; Filename: "{app}\FINTRACK.exe"
-```
-
-## Dados e diagnóstico
-
-O aplicativo guarda o banco SQLite, logs e dados persistentes em `%AppData%\FINTRACK`. Não inclua essa pasta na desinstalação automática: ela preserva os dados financeiros do usuário entre atualizações e reinstalações.
-
-## Alterar a versão
-
-Atualize o campo `version` em `package.json` antes de executar `npm run dist`.
+Para gerar uma nova versão, atualize `version` em `package.json`, ajuste `MyAppVersion` em `desktop\FINTRACK.iss` e execute novamente `npm run dist` antes de compilar o script.
