@@ -18,6 +18,10 @@ node_modules/
 dist/
 *.tsbuildinfo
 coverage/
+release/
+desktop/backend/
+build/
+dist/
 
 # Local data and logs
 *.db

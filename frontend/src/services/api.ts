@@ -1,6 +1,6 @@
 import axios from 'axios'
 import type { Budget, Category, CategoryExpense, Evolution, Summary, Transaction } from '../types'
-const api = axios.create({ baseURL: import.meta.env.VITE_API_URL || '/api/v1', timeout: 10000 })
+const api = axios.create({ baseURL: window.fintrack?.apiBaseUrl || import.meta.env.VITE_API_URL || '/api/v1', timeout: 10000 })
 export const financeApi = {
   summary: () => api.get<Summary>('/dashboard/summary').then(r => r.data), evolution: (period = 'month') => api.get<Evolution[]>('/dashboard/evolution', {params:{period}}).then(r => r.data), categoryExpenses: () => api.get<CategoryExpense[]>('/dashboard/categories').then(r => r.data), recent: () => api.get<Transaction[]>('/dashboard/recent-transactions').then(r => r.data),
   setSalary: (amount: number) => api.put<Transaction>('/dashboard/salary', { amount }).then(r => r.data),
