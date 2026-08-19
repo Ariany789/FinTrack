@@ -1,0 +1,22 @@
+services:
+  fintrack-backend:
+    build: ./backend
+    container_name: fintrack-backend
+    environment:
+      DATABASE_URL: sqlite:////app/data/fintrack.db
+      CORS_ORIGINS: http://localhost:5173
+    ports:
+      - "8000:8000"
+    volumes:
+      - fintrack-data:/app/data
+    command: sh -c "alembic upgrade head && python -m app.seed && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+  fintrack-frontend:
+    build: ./frontend
+    container_name: fintrack-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - fintrack-backend
+volumes:
+  fintrack-data:
+    name: fintrack-data
