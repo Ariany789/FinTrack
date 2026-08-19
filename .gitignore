@@ -16,6 +16,7 @@ pytest-cache-files-*/
 node_modules/
 .node/
 dist/
+electron.exe
 *.tsbuildinfo
 coverage/
 release/
