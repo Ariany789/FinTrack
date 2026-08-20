@@ -69,21 +69,21 @@ O frontend é servido pelo Nginx e encaminha as chamadas `/api` ao backend. Os d
 
 O workflow em `.github/workflows/ci.yml` instala dependências, executa Ruff e Pytest no backend e valida build TypeScript/Vite no frontend.
 
-## Distribuição Windows
+## Instalador Windows
 
-O projeto pode gerar uma pasta autocontida para instalação pelo Inno Setup. O usuário final não precisa ter Python, Node.js, npm ou banco de dados instalados.
+O projeto gera automaticamente o instalador Windows completo. O usuário final não precisa ter Python, Node.js, npm ou banco de dados instalados.
 
 ```bash
 npm install
 python -m pip install -r backend/requirements-build.txt
-npm run dist
+npm run build-installer
 ```
 
-O comando cria `dist/FINTRACK/`. Use essa pasta como origem no Inno Setup. O executável principal é `dist/FINTRACK/FINTRACK.exe`; ele inicia o backend local e abre a interface automaticamente.
+O comando cria `installer/FINTRACK-Setup.exe`. O instalador inclui o executável principal, o backend e o frontend de produção; ele cria atalhos e um desinstalador automaticamente.
 
 Os dados do usuário são mantidos em `%AppData%\FINTRACK`, separados dos arquivos instalados. Na primeira abertura, o banco SQLite é criado, as migrations são aplicadas e os dados demonstrativos são incluídos. Logs de diagnóstico ficam no mesmo diretório.
 
-Consulte `desktop/INNO_SETUP.md` para o processo de manutenção e empacotamento.
+O comando `npm run dist` continua disponível para gerar apenas a pasta autocontida `dist/FINTRACK/`.
 
 ## Roadmap
 

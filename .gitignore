@@ -16,13 +16,13 @@ pytest-cache-files-*/
 node_modules/
 .node/
 dist/
+installer/
 electron.exe
 *.tsbuildinfo
 coverage/
 release/
 desktop/backend/
 build/
-dist/
 
 # Local data and logs
 *.db

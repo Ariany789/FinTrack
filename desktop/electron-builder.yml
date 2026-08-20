@@ -1,0 +1,24 @@
+appId: com.fintrack.desktop
+productName: FINTRACK
+electronDist: node_modules/electron/dist
+directories:
+  output: installer
+files:
+  - desktop/main.cjs
+  - desktop/preload.cjs
+  - frontend/dist/**
+  - package.json
+extraResources:
+  - from: desktop/backend/FinTrackBackend.exe
+    to: backend/FinTrackBackend.exe
+win:
+  icon: desktop/fintrack.ico
+  target: nsis
+  artifactName: FINTRACK-Setup.exe
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: FINTRACK
+  deleteAppDataOnUninstall: false

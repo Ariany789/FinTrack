@@ -2,16 +2,19 @@
   "name": "fintrack-desktop",
   "version": "1.0.0",
   "private": true,
+  "author": "FinTrack",
   "description": "FinTrack desktop application",
   "main": "desktop/main.cjs",
   "scripts": {
     "build:frontend": "npm --prefix frontend run build",
     "build:backend": "python -m PyInstaller backend/fintrack_desktop.spec --noconfirm --distpath desktop/backend --workpath build/pyinstaller",
     "build": "npm run build:frontend && npm run build:backend",
-    "dist": "npm run build && node desktop/build-distribution.cjs"
+    "dist": "npm run build && node desktop/build-distribution.cjs",
+    "build-installer": "npm run build && electron-builder --config desktop/electron-builder.yml"
   },
   "devDependencies": {
-    "electron": "^37.0.0"
+    "electron": "^37.0.0",
+    "electron-builder": "^26.15.3"
   },
   "allowScripts": {
     "electron@37.10.3": true
