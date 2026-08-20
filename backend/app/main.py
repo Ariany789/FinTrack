@@ -8,7 +8,7 @@ from app.core.config import get_settings
 
 settings = get_settings()
 app = FastAPI(title="FinTrack API", version="1.0.0", description="API de controle financeiro pessoal, sem autenticação.")
-app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origin_list, allow_credentials=False, allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(CORSMiddleware, allow_origins=settings.cors_origin_list, allow_origin_regex=r"^http://127\.0\.0\.1:\d+$", allow_credentials=False, allow_methods=["*"], allow_headers=["*"])
 app.include_router(router, prefix="/api/v1")
 
 @app.exception_handler(IntegrityError)

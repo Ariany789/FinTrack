@@ -19,7 +19,7 @@ fs.renameSync(path.join(output, 'electron.exe'), path.join(output, 'FINTRACK.exe
 fs.mkdirSync(path.join(appDirectory, 'desktop'), { recursive: true })
 fs.cpSync(path.join(root, 'desktop', 'main.cjs'), path.join(appDirectory, 'desktop', 'main.cjs'), { recursive: true })
 fs.cpSync(path.join(root, 'desktop', 'preload.cjs'), path.join(appDirectory, 'desktop', 'preload.cjs'), { recursive: true })
-fs.cpSync(frontendDirectory, path.join(appDirectory, 'frontend', 'dist'), { recursive: true })
+fs.cpSync(frontendDirectory, path.join(output, 'resources', 'frontend', 'dist'), { recursive: true })
 fs.mkdirSync(path.join(output, 'resources', 'backend'), { recursive: true })
 fs.copyFileSync(backendExecutable, path.join(output, 'resources', 'backend', 'FinTrackBackend.exe'))
 fs.writeFileSync(

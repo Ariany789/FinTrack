@@ -1,17 +1,21 @@
 appId: com.fintrack.desktop
 productName: FINTRACK
 electronDist: node_modules/electron/dist
+npmRebuild: false
+asar: false
 directories:
   output: installer
 files:
   - desktop/main.cjs
   - desktop/preload.cjs
-  - frontend/dist/**
   - package.json
 extraResources:
+  - from: frontend/dist
+    to: frontend/dist
   - from: desktop/backend/FinTrackBackend.exe
     to: backend/FinTrackBackend.exe
 win:
+  signAndEditExecutable: false
   icon: desktop/fintrack.ico
   target: nsis
   artifactName: FINTRACK-Setup.exe

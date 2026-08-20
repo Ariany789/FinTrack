@@ -79,7 +79,7 @@ python -m pip install -r backend/requirements-build.txt
 npm run build-installer
 ```
 
-O comando cria `installer/FINTRACK-Setup.exe`. O instalador inclui o executável principal, o backend e o frontend de produção; ele cria atalhos e um desinstalador automaticamente.
+O comando cria `installer/FINTRACK-Setup.exe`. O instalador inclui o executável principal, o backend e o frontend de produção; ele cria atalhos e um desinstalador automaticamente. Na versão instalada, o Electron serve o frontend de produção localmente para carregar corretamente os assets e se comunicar com a API empacotada.
 
 Os dados do usuário são mantidos em `%AppData%\FINTRACK`, separados dos arquivos instalados. Na primeira abertura, o banco SQLite é criado, as migrations são aplicadas e os dados demonstrativos são incluídos. Logs de diagnóstico ficam no mesmo diretório.
 
