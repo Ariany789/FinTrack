@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Pencil, Plus, Trash2 } from 'lucide-react'
+import { ArrowDownRight, ArrowUpRight, PiggyBank, Pencil, Plus, RefreshCw, Trash2, Wallet } from 'lucide-react'
 import { type FormEvent, useState } from 'react'
 
 import { CategoryChart, EvolutionChart } from '../components/charts'
@@ -50,5 +50,21 @@ export function ReportsPage() {
   const categories = useQuery({ queryKey: ['reportCategories'], queryFn: financeApi.categoryExpenses })
   const summary = useQuery({ queryKey: ['reportSummary'], queryFn: financeApi.summary })
   if (evolution.isLoading) return <LoadingState />
-  return <div className="space-y-6"><div><h2 className="text-2xl font-bold">Relatórios</h2><p className="text-muted">Entenda sua evolução e padrões de consumo.</p></div><div className="grid gap-4 sm:grid-cols-3">{[['Receitas', summary.data?.income], ['Despesas', summary.data?.expense], ['Taxa de economia', `${summary.data?.savings_rate || 0}%`]].map(([label, value]) => <Card key={label as string}><p className="text-sm text-muted">{label as string}</p><p className="mt-2 text-2xl font-bold">{typeof value === 'string' && value.includes('%') ? value : currency(value as string)}</p></Card>)}</div><div className="grid gap-6 xl:grid-cols-2"><EvolutionChart data={evolution.data || []} /><CategoryChart data={categories.data || []} /></div></div>
+  const categoryData = categories.data || []
+  const leadingCategory = [...categoryData].sort((first, second) => Number(second.amount) - Number(first.amount))[0]
+  const evolutionData = evolution.data || []
+  const latestEvolution = evolutionData[evolutionData.length - 1]
+  const refreshReports = () => Promise.all([evolution.refetch(), categories.refetch(), summary.refetch()])
+
+  return <div className="space-y-6">
+    <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-sm font-semibold uppercase tracking-[0.2em] text-neon">Análise financeira</p><h2 className="mt-1 text-3xl font-bold">Relatórios</h2><p className="mt-2 text-muted">Leituras rápidas para decidir melhor onde seu dinheiro vai.</p></div><Button onClick={refreshReports} className="bg-panel text-white hover:bg-card"><RefreshCw className="mr-2 inline" size={17} />Atualizar relatório</Button></div>
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <Card className="border-neon/30 bg-gradient-to-br from-card to-[#15241c]"><div className="flex items-center justify-between"><p className="text-sm text-muted">Receitas</p><ArrowUpRight className="text-neon" size={20} /></div><p className="mt-3 text-2xl font-bold">{currency(summary.data?.income || 0)}</p><p className="mt-2 text-xs text-neon">Entradas no período</p></Card>
+      <Card><div className="flex items-center justify-between"><p className="text-sm text-muted">Despesas</p><ArrowDownRight className="text-danger" size={20} /></div><p className="mt-3 text-2xl font-bold">{currency(summary.data?.expense || 0)}</p><p className="mt-2 text-xs text-muted">Saídas registradas</p></Card>
+      <Card><div className="flex items-center justify-between"><p className="text-sm text-muted">Saldo acumulado</p><Wallet className="text-warning" size={20} /></div><p className="mt-3 text-2xl font-bold">{currency(latestEvolution?.balance || summary.data?.balance || 0)}</p><p className="mt-2 text-xs text-muted">Resultado do período</p></Card>
+      <Card><div className="flex items-center justify-between"><p className="text-sm text-muted">Taxa de economia</p><PiggyBank className="text-neon" size={20} /></div><p className="mt-3 text-2xl font-bold">{summary.data?.savings_rate || 0}%</p><p className="mt-2 text-xs text-muted">Da receita foi preservada</p></Card>
+    </div>
+    <div className="grid gap-4 lg:grid-cols-3"><Card className="border-warning/30 bg-panel"><p className="text-sm text-muted">Maior categoria de gasto</p><p className="mt-2 text-lg font-bold">{leadingCategory?.name || 'Sem despesas'}</p><p className="mt-1 text-sm text-warning">{leadingCategory ? currency(leadingCategory.amount) : 'Registre despesas para analisar'}</p></Card><Card className="border-border bg-panel"><p className="text-sm text-muted">Categorias ativas</p><p className="mt-2 text-lg font-bold">{categoryData.length}</p><p className="mt-1 text-sm text-muted">Com despesas no mês</p></Card><Card className="border-neon/30 bg-panel"><p className="text-sm text-muted">Leitura rápida</p><p className="mt-2 text-lg font-bold">{Number(summary.data?.savings_rate || 0) >= 20 ? 'Seu ritmo está saudável' : 'Há espaço para economizar mais'}</p><p className="mt-1 text-sm text-muted">Acompanhe a evolução abaixo</p></Card></div>
+    <div className="grid gap-6 2xl:grid-cols-[1.08fr_0.92fr]"><EvolutionChart data={evolutionData} /><CategoryChart data={categoryData} /></div>
+  </div>
 }
