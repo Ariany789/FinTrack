@@ -2,11 +2,16 @@ const { app, BrowserWindow, dialog } = require('electron')
 const { createServer } = require('node:net')
 const { spawn } = require('node:child_process')
 const { request } = require('node:http')
+const fs = require('node:fs')
 const path = require('node:path')
 
 let backendProcess
 
 app.setName('FINTRACK')
+
+function logDesktopError(message) {
+  fs.appendFileSync(path.join(app.getPath('userData'), 'desktop.log'), `${new Date().toISOString()} ${message}\n`)
+}
 
 function findAvailablePort() {
   return new Promise((resolve, reject) => {
@@ -61,7 +66,14 @@ async function createWindow() {
   })
   window.once('ready-to-show', () => window.show())
   window.loadFile(path.join(app.getAppPath(), 'frontend', 'dist', 'index.html'))
-  window.webContents.on('did-fail-load', (_, code, description) => dialog.showErrorBox('FinTrack', `Não foi possível abrir a interface.\n\n${description} (${code})`))
+  window.webContents.on('did-fail-load', (_, code, description) => {
+    logDesktopError(`Renderer load failed: ${description} (${code})`)
+    dialog.showErrorBox('FinTrack', `Não foi possível abrir a interface.\n\n${description} (${code})`)
+  })
+  window.webContents.on('console-message', (_, level, message, line, sourceId) => {
+    if (level >= 2) logDesktopError(`Renderer console: ${message} (${sourceId}:${line})`)
+  })
+  window.webContents.on('render-process-gone', (_, details) => logDesktopError(`Renderer process gone: ${details.reason}`))
 }
 
 app.whenReady().then(createWindow).catch(error => dialog.showErrorBox('FinTrack', error.message))
