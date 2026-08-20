@@ -77,7 +77,7 @@ export function DashboardPage() {
           <label htmlFor="salary">Qual é o seu salário mensal?</label>
           <input id="salary" required min="0.01" step="0.01" inputMode="decimal" placeholder="Ex.: 5000,00" value={salary} onChange={event => setSalary(event.target.value)} />
         </div>
-        <Button disabled={savingSalary}>{savingSalary ? 'Salvando...' : 'Salvar salário'}</Button>
+        <Button type="submit" disabled={savingSalary}>{savingSalary ? 'Salvando...' : 'Salvar salário'}</Button>
       </form>
       <p className="mt-3 text-xs text-muted">O valor será registrado como receita de salário neste mês e atualizará o dashboard.</p>
     </Card>

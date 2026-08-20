@@ -63,7 +63,7 @@ export function TransactionModal({ categories, transaction, onClose, onSave }: P
       <div className="grid gap-4 sm:grid-cols-2">
         <label>Tipo<select value={form.type} onChange={event => setForm({ ...form, type: event.target.value as 'INCOME' | 'EXPENSE' })}><option value="EXPENSE">Despesa</option><option value="INCOME">Receita</option></select></label>
         <label>Categoria<select required value={form.category_id} onChange={event => setForm({ ...form, category_id: event.target.value })}>{categories.map(category => <option key={category.id} value={category.id}>{category.name}</option>)}</select></label>
-        <label className="sm:col-span-2">Descrição<input required value={form.description} onChange={event => setForm({ ...form, description: event.target.value })} /></label>
+        <label className="sm:col-span-2">Descrição<input autoFocus required value={form.description} onChange={event => setForm({ ...form, description: event.target.value })} /></label>
         <label>Valor<input required inputMode="decimal" pattern="[0-9]+([.,][0-9]{1,2})?" value={form.amount} onChange={event => setForm({ ...form, amount: event.target.value })} aria-describedby={saveError ? 'transaction-save-error' : undefined} /></label>
         <label>Data<input required type="date" value={form.date} onChange={event => setForm({ ...form, date: event.target.value })} /></label>
         <label className="sm:col-span-2">Observação<textarea value={form.notes} onChange={event => setForm({ ...form, notes: event.target.value })} /></label>
